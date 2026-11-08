@@ -114,3 +114,4 @@ export function createSampleDatabase(): string {
   db.close();
   return samplePath;
 }
+

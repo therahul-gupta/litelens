@@ -317,3 +317,4 @@ export const DataGrid: React.FC<DataGridProps> = ({ tableName }) => {
     </div>
   );
 };
+

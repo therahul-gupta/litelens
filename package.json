@@ -16,6 +16,7 @@
     "build:client": "vite build",
     "build:server": "tsup src/server/cli.ts --format esm --out-dir dist/server --external better-sqlite3",
     "build": "npm run build:client && npm run build:server",
+    "test": "tsx --test tests/api.test.ts",
     "start": "node bin/litelens.js"
   },
   "keywords": [
@@ -53,6 +54,7 @@
     "postcss": "^8.5.32",
     "tailwindcss": "^3.4.17",
     "tsup": "^8.5.1",
+    "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vite": "^6.4.5"
   }

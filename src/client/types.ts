@@ -63,3 +63,4 @@ export interface QueryResult {
   executionTimeMs?: number;
   error?: string;
 }
+

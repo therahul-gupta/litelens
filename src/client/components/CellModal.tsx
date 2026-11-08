@@ -104,3 +104,4 @@ export const CellModal: React.FC<CellModalProps> = ({ isOpen, onClose, columnNam
     </div>
   );
 };
+

@@ -207,3 +207,4 @@ export const SchemaView: React.FC<SchemaViewProps> = ({ tableName }) => {
     </div>
   );
 };
+

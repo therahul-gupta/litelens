@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Play, Clock, CheckCircle2, AlertCircle, History, Sparkles } from 'lucide-react';
+import { Play, Clock, CheckCircle2, AlertCircle, History, Sparkles, Download, FileSpreadsheet, FileCode } from 'lucide-react';
 import { QueryResult } from '../types.js';
 import { CellModal } from './CellModal.js';
 
@@ -15,6 +15,38 @@ export const SqlStudio: React.FC<SqlStudioProps> = ({ initialTable }) => {
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState<string[]>([]);
   const [inspectCell, setInspectCell] = useState<{ col: string; val: any } | null>(null);
+  const [exportOpen, setExportOpen] = useState(false);
+
+  const exportResults = (format: 'csv' | 'json') => {
+    if (!result?.rows || result.rows.length === 0) return;
+    if (format === 'json') {
+      const blob = new Blob([JSON.stringify(result.rows, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `query_result_${Date.now()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } else {
+      const cols = result.columns || Object.keys(result.rows[0]);
+      const header = cols.map((c) => `"${c.replace(/"/g, '""')}"`).join(',');
+      const body = result.rows.map((row) =>
+        cols.map((col) => {
+          const val = row[col];
+          if (val === null || val === undefined) return '';
+          return `"${String(val).replace(/"/g, '""')}"`;
+        }).join(',')
+      ).join('\n');
+      const blob = new Blob([`${header}\n${body}`], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `query_result_${Date.now()}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+    setExportOpen(false);
+  };
 
   // Update SQL when table changes
   useEffect(() => {
@@ -153,14 +185,47 @@ export const SqlStudio: React.FC<SqlStudioProps> = ({ initialTable }) => {
             )}
           </div>
 
-          <button
-            onClick={runQuery}
-            disabled={loading || !sql.trim()}
-            className="flex items-center space-x-2 px-4 py-1.5 bg-sky-500 hover:bg-sky-400 disabled:bg-slate-700 disabled:cursor-not-allowed text-white text-xs font-medium rounded-md shadow transition"
-          >
-            <Play className={`w-3.5 h-3.5 fill-current ${loading ? 'animate-spin' : ''}`} />
-            <span>{loading ? 'Running...' : 'Execute Query'}</span>
-          </button>
+          <div className="flex items-center space-x-2">
+            {result?.isSelect && result.rows && result.rows.length > 0 && (
+              <div className="relative">
+                <button
+                  onClick={() => setExportOpen(!exportOpen)}
+                  className="flex items-center space-x-1.5 px-3 py-1.5 bg-[#141926] hover:bg-[#1e2538] text-slate-300 border border-[#242e44] text-xs font-medium rounded-md transition"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Export</span>
+                </button>
+
+                {exportOpen && (
+                  <div className="absolute right-0 mt-1 w-36 bg-[#121623] border border-[#232b3e] rounded-lg shadow-xl py-1 z-20">
+                    <button
+                      onClick={() => exportResults('csv')}
+                      className="w-full flex items-center space-x-2 px-3 py-1.5 text-xs text-slate-300 hover:text-white hover:bg-[#1a2033] transition"
+                    >
+                      <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Export CSV</span>
+                    </button>
+                    <button
+                      onClick={() => exportResults('json')}
+                      className="w-full flex items-center space-x-2 px-3 py-1.5 text-xs text-slate-300 hover:text-white hover:bg-[#1a2033] transition"
+                    >
+                      <FileCode className="w-3.5 h-3.5 text-sky-400" />
+                      <span>Export JSON</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <button
+              onClick={runQuery}
+              disabled={loading || !sql.trim()}
+              className="flex items-center space-x-2 px-4 py-1.5 bg-sky-500 hover:bg-sky-400 disabled:bg-slate-700 disabled:cursor-not-allowed text-white text-xs font-medium rounded-md shadow transition"
+            >
+              <Play className={`w-3.5 h-3.5 fill-current ${loading ? 'animate-spin' : ''}`} />
+              <span>{loading ? 'Running...' : 'Execute Query'}</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -242,3 +307,4 @@ export const SqlStudio: React.FC<SqlStudioProps> = ({ initialTable }) => {
     </div>
   );
 };
+
