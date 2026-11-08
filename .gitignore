@@ -6,3 +6,5 @@ node_modules
 *.sqlite3
 dist
 .env
+*.db-shm
+*.db-wal
