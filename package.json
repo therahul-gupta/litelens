@@ -30,7 +30,7 @@
     "browser",
     "developer-tools"
   ],
-  "author": "Rahul Gupta",
+  "author": "Rahul Gupta <guptarocky793@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "better-sqlite3": "^12.11.1",
