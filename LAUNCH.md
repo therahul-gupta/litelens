@@ -35,7 +35,7 @@ What it does:
 - Safe read-only mode (--readonly).
 - If run without arguments, you can click "Load Demo Store Database" to test it instantly.
 
-Code & README: https://github.com/your-username/litelens
+Code & README: https://github.com/therahul-gupta/litelens
 
 I'd love your feedback, feature ideas, and suggestions!
 ```
@@ -56,7 +56,7 @@ Hey everyone,
 Whenever I'm working with SQLite in local development (Node, Python, Go, or mobile apps), I always wanted something as slick and fast as Prisma Studio or Supabase Table View, but completely local, open-source, and with zero configuration.
 
 So I created LiteLens:
-GitHub: https://github.com/your-username/litelens
+GitHub: https://github.com/therahul-gupta/litelens
 
 How it works:
 You just pass your SQLite file:
@@ -93,7 +93,7 @@ npx litelens ./app.db
 ✨ Instant CSV/JSON export
 
 100% open-source on GitHub 👇
-https://github.com/your-username/litelens
+https://github.com/therahul-gupta/litelens
 ```
 *(Attach a short 15-second screen recording showing the CLI running and the browser opening!)*
 
